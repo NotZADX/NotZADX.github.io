@@ -1,0 +1,29 @@
+/* Very simple, mobile-first styling */
+:root {
+  --bg: #0b0f1a;
+  --panel: #121829;
+  --text: #e6e8ef;
+  --muted: #8e95a9;
+  --accent: #4c8bf5;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+.site-header { background: linear-gradient(180deg, #111a33, #0b0f1a); border-bottom: 1px solid #1c2440; }
+.nav { display: flex; gap: 1rem; align-items: center; justify-content: space-between; padding: 1rem; max-width: 1000px; margin: 0 auto; }
+.nav a { color: var(--text); text-decoration: none; opacity: 0.9; }
+.nav a:hover { opacity: 1; }
+.brand { font-weight: 700; }
+
+.hero { max-width: 1000px; margin: 0 auto; padding: 3rem 1rem; text-align: center; }
+.hero h1 { font-size: clamp(2rem, 6vw, 3rem); margin-bottom: 0.5rem; }
+.hero p { color: var(--muted); margin-bottom: 1rem; }
+.hero button { background: var(--accent); color: white; border: none; padding: 0.75rem 1rem; border-radius: 10px; cursor: pointer; }
+.hero button:hover { filter: brightness(1.05); }
+
+.content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+.content h2 { margin-top: 2rem; }
+.content section { background: var(--panel); padding: 1rem; border-radius: 12px; border: 1px solid #1c2440; }
+
+.site-footer { max-width: 900px; margin: 3rem auto; padding: 1rem; text-align: center; color: var(--muted); }
