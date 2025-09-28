@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+env:
+  ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+  ANDROID_HOME: /usr/local/lib/android/sdk
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,35 +22,46 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
 
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Accept Licenses and Install Build Tools
+      - name: Accept licenses & install platform/build-tools
         run: |
           yes | sdkmanager --licenses
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+          sdkmanager "platform-tools" "cmdline-tools;latest" \
+                     "platforms;android-34" "build-tools;34.0.0"
 
       - name: Unzip project
-        run: unzip TaskFlow-Android-v2.zip -d .
+        run: unzip -q TaskFlow-Android-v2.zip -d .
 
-      - name: Download Gradle
+      - name: Download Gradle 8.7
         run: |
           curl -sLo gradle.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
           unzip -q gradle.zip
-          echo "PATH=$PWD/gradle-8.7/bin:$PATH" >> $GITHUB_ENV
+          echo "$PWD/gradle-8.7/bin" >> $GITHUB_PATH
 
-      - name: Build Debug APK
+      - name: Sanity check
+        run: |
+          gradle --version
+          ls -la TaskFlow
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+
+      - name: Build Debug APK (verbose)
         working-directory: TaskFlow
-        run: gradle :app:assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon --stacktrace --info
 
-      - name: Upload APK
+      - name: Upload APK as artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: TaskFlow-debug
           path: TaskFlow/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Create GitHub Release and upload APK
+      - name: Create Release with APK
+        if: success()
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1-debug-${{ github.run_number }}
@@ -54,4 +69,3 @@ jobs:
           draft: false
           prerelease: true
           files: TaskFlow/app/build/outputs/apk/debug/app-debug.apk
-
