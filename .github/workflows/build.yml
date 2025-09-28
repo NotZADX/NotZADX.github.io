@@ -5,11 +5,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write
-
-env:
-  ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-  ANDROID_HOME: /usr/local/lib/android/sdk
+  contents: write  # needed for Releases
 
 jobs:
   build:
@@ -17,24 +13,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      # Unzip the Android project FIRST so later steps can see Gradle files
+      - name: Unzip project
+        run: unzip -q TaskFlow-Android-v2.zip -d .
+
+      - name: Set up JDK 17 (no cache)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
 
-      - name: Install Android SDK
+      - name: Install Android SDK + licenses
         uses: android-actions/setup-android@v3
 
-      - name: Accept licenses & install platform/build-tools
+      - name: Accept licenses and install build tools
         run: |
           yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "cmdline-tools;latest" \
-                     "platforms;android-34" "build-tools;34.0.0"
-
-      - name: Unzip project
-        run: unzip -q TaskFlow-Android-v2.zip -d .
+          sdkmanager "platform-tools" "cmdline-tools;latest" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Download Gradle 8.7
         run: |
@@ -42,26 +37,17 @@ jobs:
           unzip -q gradle.zip
           echo "$PWD/gradle-8.7/bin" >> $GITHUB_PATH
 
-      - name: Sanity check
-        run: |
-          gradle --version
-          ls -la TaskFlow
-          echo "JAVA_HOME=$JAVA_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-
-      - name: Build Debug APK (verbose)
+      - name: Build Debug APK
         working-directory: TaskFlow
         run: gradle :app:assembleDebug --no-daemon --stacktrace --info
 
-      - name: Upload APK as artifact
-        if: success()
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: TaskFlow-debug
           path: TaskFlow/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Create Release with APK
-        if: success()
+      - name: Create GitHub Release with APK
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1-debug-${{ github.run_number }}
