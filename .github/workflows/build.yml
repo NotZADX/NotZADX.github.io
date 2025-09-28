@@ -16,15 +16,24 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Licenses
+        run: yes | sdkmanager --licenses
 
       - name: Unzip project
         run: unzip TaskFlow-Android-v2.zip -d .
 
+      - name: Download Gradle
+        run: |
+          curl -sLo gradle.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
+          unzip -q gradle.zip
+          echo "PATH=$PWD/gradle-8.7/bin:$PATH" >> $GITHUB_ENV
+
       - name: Build Debug APK
         working-directory: TaskFlow
-        run: ./gradlew :app:assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
