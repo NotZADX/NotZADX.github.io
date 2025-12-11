@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Defense Grid</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <section id="main-menu" class="screen visible">
+      <div class="panel">
+        <h1>Cyber Defense Grid</h1>
+        <button id="play-button" class="primary">Play</button>
+        <button id="settings-button">Settings</button>
+      </div>
+    </section>
+
+    <section id="level-select" class="screen hidden">
+      <div class="panel">
+        <h2>Select Level</h2>
+        <div id="levels-list" class="levels"></div>
+        <button id="back-to-menu">Back</button>
+      </div>
+    </section>
+
+    <section id="settings" class="screen hidden">
+      <div class="panel">
+        <h2>Settings</h2>
+        <div class="toggle-row">
+          <label for="music-toggle">Music</label>
+          <button id="music-toggle" data-state="on">On</button>
+        </div>
+        <div class="toggle-row">
+          <label for="sfx-toggle">Sound Effects</label>
+          <button id="sfx-toggle" data-state="on">On</button>
+        </div>
+        <button id="close-settings">Close</button>
+      </div>
+    </section>
+
+    <section id="overlay" class="screen hidden">
+      <div id="game-ui" class="hud">
+        <div class="hud-left">
+          <div class="stat">💰 <span id="money">0</span></div>
+          <div class="stat">❤️ <span id="lives">0</span></div>
+          <div class="stat">Wave <span id="wave">0</span>/<span id="total-waves">0</span></div>
+        </div>
+        <div class="hud-right">
+          <button id="speed-button">1x</button>
+          <button id="next-wave">Next Wave</button>
+          <button id="pause-button">Pause</button>
+        </div>
+      </div>
+
+      <div id="build-panel" class="panel build-panel">
+        <h3>Towers</h3>
+        <div id="tower-list" class="tower-list"></div>
+      </div>
+
+      <div id="tower-info" class="panel tower-info hidden">
+        <h3 id="tower-name">Tower</h3>
+        <div id="tower-stats"></div>
+        <div class="actions">
+          <button id="upgrade-button">Upgrade</button>
+          <button id="sell-button">Sell</button>
+        </div>
+      </div>
+
+      <div id="message" class="panel message hidden"></div>
+    </section>
+
+    <section id="pause-menu" class="screen hidden">
+      <div class="panel">
+        <h2>Paused</h2>
+        <button id="resume-button">Resume</button>
+        <button id="restart-button">Restart</button>
+        <button id="quit-button">Quit to Menu</button>
+      </div>
+    </section>
+
+    <section id="end-screen" class="screen hidden">
+      <div class="panel">
+        <h2 id="end-title">Level Complete</h2>
+        <p id="end-stats"></p>
+        <button id="retry-button">Retry</button>
+        <button id="back-levels">Back to Level Select</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="canvas-container">
+    <canvas id="game-canvas" width="1024" height="576"></canvas>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
