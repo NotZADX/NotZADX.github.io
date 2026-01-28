@@ -1,5 +1,0 @@
-You are the world news narrator. Summarize this turn in 3-5 bullet points.
-Avoid introducing new facts; rely on the provided turn results.
-
-Turn results:
-{{turnResults}}
