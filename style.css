@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+  --bg: #0a0f1a;
+  --panel: rgba(22, 32, 50, 0.9);
+  --accent: #33ffee;
+  --accent-2: #ff3fa4;
+  --text: #e6f7ff;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% 20%, #13203b, #05070d 60%);
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+
+.screen.hidden { display: none; }
+.screen.visible { display: flex; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 20px;
+  min-width: 320px;
+  pointer-events: all;
+  box-shadow: 0 0 15px rgba(51, 255, 238, 0.2);
+}
+
+.panel h1, .panel h2, .panel h3 { margin-top: 0; }
+
+button {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.2s, transform 0.1s;
+}
+button:hover { background: rgba(51, 255, 238, 0.15); }
+button:active { transform: translateY(1px); }
+button.primary { background: var(--accent); color: #0a0f1a; }
+
+#canvas-container {
+  position: relative;
+  width: 1024px;
+  height: 576px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #0f1825;
+}
+
+.hud {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  pointer-events: all;
+}
+
+.hud .stat { margin-right: 14px; }
+.hud-right button { margin-left: 10px; }
+
+.build-panel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 240px;
+}
+
+.tower-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.tower-card {
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: border 0.2s, transform 0.1s;
+}
+
+.tower-card.unaffordable { opacity: 0.5; cursor: not-allowed; }
+.tower-card.selected { border-color: var(--accent-2); }
+
+.tower-card h4 { margin: 0 0 4px; }
+.tower-card .cost { font-size: 12px; color: var(--accent); }
+
+.tower-info {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 260px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.message {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  text-align: center;
+}
+
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.level-button {
+  padding: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.level-button.locked { opacity: 0.4; cursor: not-allowed; }
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.health-bar {
+  width: 50px;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.health-bar-inner {
+  height: 100%;
+  background: #58ff9a;
+}
